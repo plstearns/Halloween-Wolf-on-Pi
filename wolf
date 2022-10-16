@@ -1,0 +1,107 @@
+#This file is called main.py and is my working file for the wolf halloween project
+import sys
+import time
+import gpiozero
+from gpiozero import LED
+from time import sleep
+from signal import pause
+import pygame
+from pygame import mixer
+wolf = 'wolf.mp3'
+eyes = LED(17)
+x = .6 #This is the amount of time relay 1 is off - I think the relays I have do not allow me to reactivate it for ~1second - This has been confirmed by removing the sleep
+# but I left the sleep command in because I'd like to use this script later with solid state relays.
+y = .4 #.1 #This is the amount of time relay 1 is on
+#a = (random.uniform(0.235,2.875))
+
+
+
+#This sets the relay pins and  for the Pi Hat I am using
+#Relay #1 is pin 26, Relay 2 is pin 20, Relay 3 is pin 21
+RELAY1_PIN = 26
+RELAY2_PIN = 20
+RELAY3_PIN = 21
+LED_PIN = 27
+
+# creates the objects relay1, relay 2, and relay3
+# The third relay is not used for wolf but I wanted it in for other projects I plan on raiding this script for
+# They will move the mouth, head, and body of the wolf respectively
+# Triggered by the output pin going low: active_high=False.
+# Initially off: initial_value=False
+relay1 = gpiozero.OutputDevice(RELAY1_PIN, active_high=False, initial_value=False)
+relay2 = gpiozero.OutputDevice(RELAY2_PIN, active_high=False, initial_value=False)
+#relay3 = gpiozero.OutputDevice(RELAY3_PIN, active_high=False, initial_value=False)
+# Create the LED
+#eyes = LED(17)
+
+#Turn eyes on
+eyes.on()
+print("Turning eyes on")
+
+#Defining the relays 1, 2, and 3
+#Defining Relay 1
+def set_relay1(status):
+    if status:
+        print("Setting relay 1: OFF")
+        relay1.on()
+    else:
+        print("Setting relay 1: ON")
+        relay1.off()
+def toggle_relay1():
+    print("toggling relay 1")
+    relay1.toggle()
+def toggle_relay2():
+    print("turning on relay 2")
+    relay2.toggle()
+#def toggle_relay3():
+#    print("turning on relay 3")
+#    relay3.toggle()
+#Defining Relay 2
+def set_relay2(status):
+    if status:
+        print("Setting relay 2: ON")
+        relay2.on()
+    else:
+        print("Setting relay 2: OFF")
+        relay2.off()
+#Defining Relay 3
+#def set_relay3(status):
+#    if status:
+#        print("Setting relay 3: ON")
+#        relay3.on()
+#    else:
+#        print("Setting relay 3: OFF")
+#        relay3.off()
+
+def mplayer(name):
+    '''  for playing music  '''
+    mixer.init()
+    mixer.music.load(name)
+    mixer.music.set_volume(0.05)
+    mixer.music.play()
+    print("Playing wolf sound")
+
+mplayer('wolf.mp3')
+
+while mixer.music.get_busy():
+#       continue
+
+#Toggle Relay 1
+        #relay1.toggle
+        set_relay1(False)
+#       time.sleep(random.uniform(0.235,2.875))
+        time.sleep(y)
+        set_relay1(True)
+        time.sleep(x)
+
+#Blink LED
+#       eyes.on()    #turn led on
+#       print("turing on")
+        #sleep(.07)    #delay for 1 second
+        #eyes.off()   #turn led off
+        #print("turning off")
+        #sleep(.05)
+
+
+        continue
+
